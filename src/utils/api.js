@@ -100,3 +100,85 @@ export const logoutUser = () => {
   clearSession();
   window.location.reload();
 }; 
+
+export const adminLogin = async (credentials) => {
+  return await apiCall('/admin/login', {
+    method: 'POST',
+    body: JSON.stringify(credentials),
+  });
+};
+
+export const setAdminSession = (admin, token) => {
+  localStorage.setItem('admin', JSON.stringify(admin));
+  localStorage.setItem('admin_token', token);
+  localStorage.setItem('isAdminLoggedIn', 'true');
+}; 
+
+// ADMIN CRUD
+export const getAdmins = async () => {
+  return await apiCall('/admin-management/admins', { method: 'GET', headers: { 'Authorization': `Bearer ${localStorage.getItem('admin_token')}` } });
+};
+export const createAdmin = async (adminData) => {
+  return await apiCall('/admin-management/admins', { method: 'POST', body: JSON.stringify(adminData), headers: { 'Authorization': `Bearer ${localStorage.getItem('admin_token')}` } });
+};
+export const updateAdmin = async (admin_id, adminData) => {
+  return await apiCall(`/admin-management/admins/${admin_id}`, { method: 'PUT', body: JSON.stringify(adminData), headers: { 'Authorization': `Bearer ${localStorage.getItem('admin_token')}` } });
+};
+export const getAdminInfo = async (admin_id) => {
+  return await apiCall(`/admin-management/admins/${admin_id}`, { method: 'GET', headers: { 'Authorization': `Bearer ${localStorage.getItem('admin_token')}` } });
+};
+export const deleteAdmin = async (admin_id) => {
+  return await apiCall(`/admin-management/admins/${admin_id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${localStorage.getItem('admin_token')}` } });
+};
+
+// USER CRUD
+export const getUsers = async () => {
+  return await apiCall('/admin-management/users', { method: 'GET', headers: { 'Authorization': `Bearer ${localStorage.getItem('admin_token')}` } });
+};
+export const updateUserStatus = async (user_id, status) => {
+  return await apiCall(`/admin-management/users/${user_id}/status`, { method: 'PATCH', body: JSON.stringify({ status }), headers: { 'Authorization': `Bearer ${localStorage.getItem('admin_token')}` } });
+};
+export const getUserInfo = async (user_id) => {
+  return await apiCall(`/admin-management/users/${user_id}`, { method: 'GET', headers: { 'Authorization': `Bearer ${localStorage.getItem('admin_token')}` } });
+};
+export const deleteUser = async (user_id) => {
+  return await apiCall(`/admin-management/users/${user_id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${localStorage.getItem('admin_token')}` } });
+}; 
+
+// TEMPLATE CRUD
+export const getTemplates = async () => {
+  return await apiCall('/admin-management/templates', { 
+    method: 'GET', 
+    headers: { 'Authorization': `Bearer ${localStorage.getItem('admin_token')}` } 
+  });
+};
+
+export const getTemplateById = async (template_id) => {
+  return await apiCall(`/admin-management/templates/${template_id}`, { 
+    method: 'GET', 
+    headers: { 'Authorization': `Bearer ${localStorage.getItem('admin_token')}` } 
+  });
+};
+
+export const createTemplate = async (templateData) => {
+  return await apiCall('/admin-management/templates', { 
+    method: 'POST', 
+    body: JSON.stringify(templateData), 
+    headers: { 'Authorization': `Bearer ${localStorage.getItem('admin_token')}` } 
+  });
+};
+
+export const updateTemplate = async (template_id, templateData) => {
+  return await apiCall(`/admin-management/templates/${template_id}`, { 
+    method: 'PUT', 
+    body: JSON.stringify(templateData), 
+    headers: { 'Authorization': `Bearer ${localStorage.getItem('admin_token')}` } 
+  });
+};
+
+export const deleteTemplate = async (template_id) => {
+  return await apiCall(`/admin-management/templates/${template_id}`, { 
+    method: 'DELETE', 
+    headers: { 'Authorization': `Bearer ${localStorage.getItem('admin_token')}` } 
+  });
+}; 
